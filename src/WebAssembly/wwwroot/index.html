@@ -39,7 +39,7 @@
         window.downloadElementAsImage = async (elementId, fileName) => {
             const element = document.getElementById(elementId);
             const canvas = await html2canvas(element, {
-                backgroundColor: null,
+                backgroundColor: '#12827A',
                 scale: 2,
                 useCORS: true
             });

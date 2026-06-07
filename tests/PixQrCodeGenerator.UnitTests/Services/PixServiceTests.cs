@@ -1,4 +1,5 @@
-﻿using WebAssembly.Domain.Requests;
+﻿using WebAssembly.Domain;
+using WebAssembly.Domain.Requests;
 using WebAssembly.Services;
 
 namespace PixQrCodeGenerator.UnitTests.Services;
@@ -13,7 +14,7 @@ public class PixServiceTests
         var request = new CreatePixPlateRequest
         {
             Key = "12345678909",
-            KeyType = "CPF",
+            KeyType = EKeyType.Document,
             Name = "João da Silva",
             City = "SÃO PAULO",
             Value = 100.50m

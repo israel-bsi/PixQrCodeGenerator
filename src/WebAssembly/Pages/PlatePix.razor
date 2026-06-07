@@ -1,5 +1,6 @@
 ﻿@page "/"
 @using Net.Codecrete.QrCodeGenerator
+@using WebAssembly.Domain
 @using WebAssembly.Domain.Requests
 @using WebAssembly.Services
 @inject IPixService PixService
@@ -12,28 +13,33 @@
                 <h3 class="fw-bold mb-4">Configurar Placa</h3>
                 <div class="mb-3">
                     <label class="form-label">Tipo de Chave</label>
-                    <select class="form-select" @bind="Request.KeyType">
-                        <option value="CPF">CPF/CNPJ</option>
-                        <option value="EMAIL">E-mail</option>
-                        <option value="TEL">Telefone</option>
-                        <option value="ALEATORIA">Chave Aleatória</option>
+                    <select class="form-select" @bind="Request.KeyType" @bind:after="GenerateQrCode">
+                        <option value="@EKeyType.Document">CPF/CNPJ</option>
+                        <option value="@EKeyType.Email">E-mail</option>
+                        <option value="@EKeyType.PhoneNumber">Telefone</option>
+                        <option value="@EKeyType.Random">Chave Aleatória</option>
                     </select>
                 </div>
                 <div class="mb-3">
                     <label class="form-label">Chave Pix</label>
-                    <input class="form-control" placeholder="Digite sua chave" @bind="Request.Key" @bind:event="oninput" />
+                    <input class="form-control" placeholder="Digite sua chave" @bind="Request.Key" @bind:event="oninput" @bind:after="GenerateQrCode" />
                 </div>
                 <div class="mb-3">
                     <label class="form-label">Nome do Recebedor</label>
-                    <input class="form-control" placeholder="Ex: João Silva" @bind="Request.Name" @bind:event="oninput" />
+                    <input class="form-control" placeholder="Ex: João Silva" @bind="Request.Name" @bind:event="oninput" @bind:after="GenerateQrCode" />
                 </div>
                 <div class="mb-3">
                     <label class="form-label">Cidade</label>
-                    <input class="form-control" placeholder="Ex: Sao Paulo" @bind="Request.City" @bind:event="oninput" />
+                    <input class="form-control" placeholder="Ex: Sao Paulo" @bind="Request.City" @bind:event="oninput" @bind:after="GenerateQrCode" />
                 </div>
                 <div class="mb-3">
                     <label class="form-label">Valor (Opcional)</label>
-                    <input type="number" class="form-control" @bind="Request.Value" @bind:event="oninput" />
+                    <input type="number" class="form-control" @bind="Request.Value" @bind:event="oninput" @bind:after="GenerateQrCode" />
+                </div>
+                <div class="mb-3">
+                    <label class="form-label">Identificador (TxId - Opcional)</label>
+                    <input class="form-control" placeholder="Ex: MESA01" @bind="Request.TxId" @bind:event="oninput" @bind:after="GenerateQrCode" />
+                    <small class="text-muted" style="font-size: 0.75rem;">Máx. 25 caracteres alfanuméricos. Espaços serão removidos.</small>
                 </div>
                 <button class="btn btn-primary w-100 mt-3 py-2 fw-bold" @onclick="DownloadPlate">
                     <i class="bi bi-download me-2"></i> Baixar Placa em PNG
@@ -72,7 +78,7 @@
 @code {
     private CreatePixPlateRequest Request { get; } = new()
     {
-        KeyType = "CPF",
+        KeyType = EKeyType.Document,
         Key = "000.000.000-00",
         Name = "NOME DO RECEBEDOR",
         City = "CIDADE"
@@ -94,6 +100,8 @@
             var response = PixService.GeneratePayload(Request);
             var qr = QrCode.EncodeText(response.Payload, QrCode.Ecc.Medium);
             var svgText = qr.ToSvgString(4);
+
+            svgText = svgText.Replace("<svg ", "<svg width=\"200\" height=\"200\" ");
 
             var svgBytes = System.Text.Encoding.UTF8.GetBytes(svgText);
             var base64Svg = Convert.ToBase64String(svgBytes);
