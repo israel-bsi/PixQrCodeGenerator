@@ -1,0 +1,4 @@
+<Solution>
+  <Project Path="PixQrCodeGenerator/PixQrCodeGenerator.Client/PixQrCodeGenerator.Client.csproj" />
+  <Project Path="PixQrCodeGenerator/PixQrCodeGenerator/PixQrCodeGenerator.csproj" />
+</Solution>

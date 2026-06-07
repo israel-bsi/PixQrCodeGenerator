@@ -1,0 +1,37 @@
+﻿<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="utf-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <base href="/" />  
+    <link href="https://fonts.googleapis.com/css?family=Roboto:300,400,500,700&display=swap" rel="stylesheet" />
+    <link href=@Assets["_content/MudBlazor/MudBlazor.min.css"] rel="stylesheet" />
+    <ImportMap />
+    <link rel="icon" type="image/ico" href="favicon.ico" />
+    <HeadOutlet @rendermode="InteractiveWebAssembly" />
+</head>
+
+<body>
+    <PlacaPix @rendermode="InteractiveServer" />
+    <script src="_framework/blazor.web.js"></script>
+    <script src=@Assets["_content/MudBlazor/MudBlazor.min.js"]></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/html2canvas/1.4.1/html2canvas.min.js"></script>
+    <script>
+        window.downloadElementAsImage = async (elementId, fileName) => {
+        const element = document.getElementById(elementId);
+        const canvas = await html2canvas(element, {
+        backgroundColor: null,
+        scale: 2, // Aumenta a qualidade da imagem
+        useCORS: true
+        });
+
+        const link = document.createElement('a');
+        link.download = fileName;
+        link.href = canvas.toDataURL("image/png");
+        link.click();
+        };
+    </script>
+</body>
+
+</html>
