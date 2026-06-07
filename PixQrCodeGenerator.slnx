@@ -1,4 +1,8 @@
 <Solution>
-  <Project Path="PixQrCodeGenerator/PixQrCodeGenerator.Client/PixQrCodeGenerator.Client.csproj" />
-  <Project Path="PixQrCodeGenerator/PixQrCodeGenerator/PixQrCodeGenerator.csproj" />
+  <Folder Name="/src/">
+    <Project Path="src/WebAssembly/WebAssembly.csproj" />
+  </Folder>
+  <Folder Name="/tests/">
+    <Project Path="tests/PixQrCodeGenerator.UnitTests/PixQrCodeGenerator.UnitTests.csproj" />
+  </Folder>
 </Solution>
